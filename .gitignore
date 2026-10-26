@@ -1,0 +1,45 @@
+# Python / uv
+backend/.venv/
+backend/__pycache__/
+backend/.pytest_cache/
+backend/.pytest-tmp/
+*.py[cod]
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Audio and local runtime artifacts
+*.wav
+*.pcm
+*.log
+backend/runtime_audio/
+runtime_audio/
+
+# PlatformIO
+.pio/
+.platformio/
+.pio-core/
+.uv-cache/
+firmware/.pio/
+firmware/.cache/
+firmware/.clangd/
+firmware/.pioenvs/
+firmware/.sconsign.dblite
+Embedded System/include/secrets.h
+Embedded System/.pio/
+Embedded System/pio-error.txt
+Embedded System/.cache/
+
+# Editors / operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Markdown documentation is kept local for now
+*.md

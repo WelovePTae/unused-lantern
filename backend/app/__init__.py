@@ -1,0 +1,1 @@
+"""Lantern backend application package."""
