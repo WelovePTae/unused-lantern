@@ -65,57 +65,6 @@ flowchart LR
 | สายไฟ VAF + ปลั๊กตัวผู้ | เดินไฟ 220V จากเต้ารับ | 1 ชุด |
 | สายจัมเปอร์ / บอร์ดทดลอง | ต่อรีเลย์กับ Arduino | 1 ชุด |
 
-## โค้ดหลัก
-
-**หลังบ้าน (Python)** ฟังเสียง แปลงเป็นข้อความ เช็กคำปลุก แล้วส่งคำสั่ง
-
-```python
-import serial
-import speech_recognition as sr
-
-arduino = serial.Serial("COM3", 9600)   # พอร์ตของ Arduino
-recognizer = sr.Recognizer()
-
-with sr.Microphone() as mic:
-    while True:
-        audio = recognizer.listen(mic)
-        try:
-            text = recognizer.recognize_google(audio, language="th-TH")
-        except sr.UnknownValueError:
-            continue
-
-        if "ตี๋" not in text:          # ไม่มีคำปลุก ไม่ทำอะไร
-            continue
-        command = text.split("ตี๋", 1)[1]
-
-        # เช็ก "เปิด" ก่อน เพราะคำว่า "เปิด" มี "ปิด" อยู่ข้างใน
-        if "เปิด" in command:
-            arduino.write(b"1")
-        elif "ปิด" in command:
-            arduino.write(b"0")
-```
-
-**Arduino** รอรับคำสั่งแล้วสั่งรีเลย์
-
-```cpp
-const int RELAY_PIN = 7;
-
-void setup() {
-  Serial.begin(9600);              // รับคำสั่งจากหลังบ้านทาง USB
-  pinMode(RELAY_PIN, OUTPUT);
-  digitalWrite(RELAY_PIN, LOW);     // เริ่มต้นไฟดับ
-}
-
-void loop() {
-  if (Serial.available()) {
-    char cmd = Serial.read();
-
-    if (cmd == '1') digitalWrite(RELAY_PIN, HIGH);   // เปิดไฟ
-    if (cmd == '0') digitalWrite(RELAY_PIN, LOW);    // ปิดไฟ
-  }
-}
-```
-
 ## ⚠️ ความปลอดภัย
 
 โปรเจคนี้ใช้ไฟบ้าน 220V ซึ่ง**อันตรายถึงชีวิต**
@@ -135,6 +84,21 @@ void loop() {
 python3 -m http.server
 # แล้วเปิด http://localhost:8000
 ```
+
+## เครดิตรูปภาพ
+
+รูปอุปกรณ์ในแผนผังมาจาก Wikimedia Commons ตัดพื้นหลังและย่อขนาดแล้ว (ไฟล์ใน `assets/flow/`)
+
+| รูป | ที่มา | ผู้สร้าง | สัญญาอนุญาต |
+| --- | --- | --- | --- |
+| Arduino UNO R4 | [Arduino Uno R4 Minima perspective](https://commons.wikimedia.org/wiki/File:Arduino_Uno_R4_Minima_perspective.webp) | Arduino | CC BY-SA 3.0 |
+| รีเลย์ | [SRD-05VDC-SL-C 5V one-channel relay module](https://commons.wikimedia.org/wiki/File:SRD-05VDC-SL-C_5V_one-channel_relay_module.jpg) | Suyash.dwivedi | CC BY-SA 4.0 |
+| หลอดไฟ | [Incandescent bulb, frosted](https://commons.wikimedia.org/wiki/File:Incandescent_bulb,_frosted.jpg) | Kotivalo | CC BY-SA 4.0 |
+| ไมโครโฟน | [USB-Microphone](https://commons.wikimedia.org/wiki/File:USB-Microphone.jpg) | Evan-Amos | Public domain |
+| โน้ตบุ๊ก | [Toshiba Satellite Pro (white background)](https://commons.wikimedia.org/wiki/File:Toshiba_Satellite_Pro_(white_background).jpg) | Smial | Free Art License |
+| ปลั๊ก | [Type C Europlug](https://commons.wikimedia.org/wiki/File:Type_C_Europlug.jpg) | Wikimedia Commons user | CC0 |
+
+รูป 3D หลอดไฟหน้าแรก และไอคอนในส่วนอุปกรณ์/ทีม มาจาก [3dicons.co](https://3dicons.co) (CC0)
 
 ## ทีม
 
